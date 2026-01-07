@@ -30,7 +30,6 @@ class ProductImage extends StatelessWidget {
                     curve: Curves.easeIn,
                     onPointer: true,
                     debugPrint: false,
-                    fullScreen: false,
                     fitAndroidIos: BoxFit.contain,
                     fitWeb: BoxFitWeb.cover,
                     onLoading: const CircularProgressIndicator(

@@ -22,7 +22,7 @@ import 'package:home_widget/home_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../utills/colors_resources.dart';
-import 'package:flutter_share/flutter_share.dart';
+import 'package:share_plus/share_plus.dart';
 class CategoryManager extends StatefulWidget {
   final String? categoryId;
   final String? category;
@@ -308,10 +308,9 @@ class _CategoryManagerState extends State<CategoryManager> {
                                     children: [
                                       LightCircleButton(
                                           onPressed: () async{
-                                            await FlutterShare.share(
-                                            title: widget.category!,
-                                            text: allAya[index].aya.toString() + AllText.appLink,
-                                            chooserTitle: 'Quran App');
+                                            await Share.share(
+                                            allAya[index].aya.toString() + '\n\n' + AllText.appLink,
+                                            subject: widget.category!);
                                           }, 
                                           icon: Icons.share,
                                         ),

@@ -10,7 +10,6 @@ import android.view.View
 import android.widget.RemoteViews
 import android.widget.TextView
 import androidx.annotation.RequiresApi
-import androidx.recyclerview.widget.RecyclerView
 import es.antonborri.home_widget.HomeWidgetLaunchIntent
 import es.antonborri.home_widget.HomeWidgetProvider
 import io.flutter.embedding.android.FlutterActivity

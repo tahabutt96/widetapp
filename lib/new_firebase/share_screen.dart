@@ -5,7 +5,7 @@ import 'package:appwidgetflutter/utills/all_text.dart';
 import 'package:appwidgetflutter/utills/colors_resources.dart';
 import 'package:appwidgetflutter/utills/images_sources.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_share/flutter_share.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:google_fonts/google_fonts.dart';
 class ShareScreen extends StatelessWidget {
   final bool? isShowBack;
@@ -53,10 +53,9 @@ class ShareScreen extends StatelessWidget {
                       textColor: Colors.white, 
                       buttonColor: ColorResources.THEMECOLOR, 
                       onPressed: () async{
-                        await FlutterShare.share(
-                            title: "تحميل التطبيق",
-                            text: AllText.appLink,
-                            chooserTitle: 'Quran App');
+                        await Share.share(
+                            AllText.appLink,
+                            subject: 'Quran App');
                       },
                     ),
                   ),

@@ -30,7 +30,7 @@ class _SwitchWidgetState extends State<SwitchWidget> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               InkWell(
-                onTap: ()async{
+                onTap: () async {
                   await platform.invokeMethod('pinWidget');
                 },
                 child: Container(
@@ -46,17 +46,22 @@ class _SwitchWidgetState extends State<SwitchWidget> {
                       borderRadius: BorderRadius.circular(20.0),
                       color: ColorResources.BOTTOM_BAR_SELECTED,
                     ),
-                    child: Center(child: Text('تفعيل',style: TextStyle(
-                      color: ColorResources.WHITE,
-                    ),)),  
+                    child: Center(
+                        child: Text(
+                      'تفعيل',
+                      style: TextStyle(
+                        color: ColorResources.WHITE,
+                      ),
+                    )),
                   ),
                 ),
               ),
-              Text("أداة الشاشة",
-               style: GoogleFonts.lexend(
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
-                color:ColorResources.BOTTOM_BAR_SELECTED),
+              Text(
+                "أداة الشاشة",
+                style: GoogleFonts.lexend(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    color: ColorResources.BOTTOM_BAR_SELECTED),
               ),
             ],
           ),
@@ -80,15 +85,13 @@ class _CustomSwitchState extends State<CustomSwitch> {
   Widget build(BuildContext context) {
     return GestureDetector(
       child: AnimatedToggleSwitch<bool>.dual(
-        current: isSwitchValue,//SharePrefs.getSwitchValue() ?? 
+        current: isSwitchValue, //SharePrefs.getSwitchValue() ??
         first: false,
         second: true,
-        dif: -12.0,
-        borderColor: Colors.transparent,
         borderWidth: 2.0,
         height: 25,
         minTouchTargetSize: 150.0,
-        onChanged: (b)async {
+        onChanged: (b) async {
           await platform.invokeMethod('pinWidget');
           setState(() {
             isSwitchValue = !isSwitchValue;
@@ -105,17 +108,15 @@ class _CustomSwitchState extends State<CustomSwitch> {
           //  setState(() {});
           // }
         },
-        colorBuilder: (b) => b
-            ? ColorResources.BOTTOM_BAR_SELECTED
-            : Colors.grey,
-        textBuilder: (value) => value
-            ? Center(child: Text(''))
-            : Center(child: Text('')),
+        textBuilder: (value) =>
+            value ? Center(child: Text('')) : Center(child: Text('')),
       ),
     );
   }
-   Future _sendData(value) async {
-      await HomeWidget.saveWidgetData<bool>('view', value);
-      await HomeWidget.updateWidget( name: 'AppWidgetProvider', iOSName: 'AppWidgetProvider');
+
+  Future _sendData(value) async {
+    await HomeWidget.saveWidgetData<bool>('view', value);
+    await HomeWidget.updateWidget(
+        name: 'AppWidgetProvider', iOSName: 'AppWidgetProvider');
   }
 }
