@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>998235973423-jjprc4j2js8uvmh4qliieo3tigkv7mq9.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.998235973423-jjprc4j2js8uvmh4qliieo3tigkv7mq9</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDj2a1L2XwRMjWXi_k_Vy-NRVt0Gmct6Ng</string>
+	<key>GCM_SENDER_ID</key>
+	<string>998235973423</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.appwidgetflutter</string>
+	<key>PROJECT_ID</key>
+	<string>arabic-9b31b</string>
+	<key>STORAGE_BUCKET</key>
+	<string>arabic-9b31b.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:998235973423:ios:b64b1cd286c4ba8c1b23da</string>
+	<key>DATABASE_URL</key>
+	<string>https://arabic-9b31b-default-rtdb.firebaseio.com</string>
+</dict>
+</plist>
