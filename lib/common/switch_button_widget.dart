@@ -31,7 +31,13 @@ class _SwitchWidgetState extends State<SwitchWidget> {
             children: [
               InkWell(
                 onTap: () async {
-                  await platform.invokeMethod('pinWidget');
+                 try {
+                    await platform.invokeMethod('pinWidget');
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Error: $e')),
+                    );
+                  }
                 },
                 child: Container(
                   decoration: BoxDecoration(

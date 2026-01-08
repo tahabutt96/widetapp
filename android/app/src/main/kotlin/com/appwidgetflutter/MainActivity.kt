@@ -1,5 +1,6 @@
 package com.appwidgetflutter
 
+import android.os.Bundle
 import android.app.PendingIntent
 import android.appwidget.AppWidgetHost
 import android.appwidget.AppWidgetManager
@@ -44,27 +45,21 @@ class MainActivity: FlutterActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val appWidgetManager: AppWidgetManager? = getSystemService(AppWidgetManager::class.java)
             val myProvider = ComponentName(this, AppWidgetProvider::class.java)
-            assert(appWidgetManager != null)
-            if (appWidgetManager!!.isRequestPinAppWidgetSupported) {
-                val pinnedWidgetCallbackIntent = Intent(this, MainActivity::class.java)
+            
+            if (appWidgetManager != null && appWidgetManager.isRequestPinAppWidgetSupported) {
+                val pinnedWidgetCallbackIntent = Intent(this, AppWidgetProvider::class.java)
                 val successCallback: PendingIntent = PendingIntent.getBroadcast(
                     this, 0,
-                    pinnedWidgetCallbackIntent, PendingIntent.FLAG_UPDATE_CURRENT
+                    pinnedWidgetCallbackIntent, 
+                    PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
                 )
-                val ids = AppWidgetManager.getInstance(this).getAppWidgetIds(
-                    ComponentName(
-                        this,
-                        AppWidgetProvider::class.java
-                    )
-                )
-                if(ids.isEmpty()){
-                    appWidgetManager.requestPinAppWidget(myProvider, null, successCallback)
-                }else{
-                    Toast.makeText(this, "Widget already added to Home screen", Toast.LENGTH_LONG).show()
-                }
+                appWidgetManager.requestPinAppWidget(myProvider, null, successCallback)
+                Toast.makeText(this, "Widget pinned successfully!", Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(this, "Widget pinning not supported", Toast.LENGTH_LONG).show()
             }
         }
-    }
+    }  
     private fun removeAppWidget(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val appWidgetManager: AppWidgetManager? = getSystemService(AppWidgetManager::class.java)

@@ -3,7 +3,6 @@
     android:minWidth="1000dp"
     android:minHeight="170dp"
     android:minResizeWidth="1000dp"
-    android:maxResizeHeight="@dimen/_200sdp"
     android:minResizeHeight="170dp"
     android:updatePeriodMillis="3600000"
     android:widgetCategory="home_screen" />
