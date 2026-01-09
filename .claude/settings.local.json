@@ -4,7 +4,8 @@
       "Bash(./gradlew assembleDebug:*)",
       "Bash(dir gradlew*)",
       "Bash(dir:*)",
-      "Bash(findstr:*)"
+      "Bash(findstr:*)",
+      "Bash(flutter run)"
     ]
   }
 }
