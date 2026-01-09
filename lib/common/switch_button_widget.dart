@@ -1,9 +1,16 @@
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
+import 'package:appwidgetflutter/common/widget_instructions_dialog.dart';
+import 'package:appwidgetflutter/common/widget_pin_preview_dialog.dart';
 import 'package:appwidgetflutter/utills/colors_resources.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:home_widget/home_widget.dart';
+
+/// Configuration: Choose widget pin method
+/// Set to true: Shows manual instructions (NO native dialog)
+/// Set to false: Shows preview + native dialog (RECOMMENDED)
+const bool USE_MANUAL_INSTRUCTIONS = false;
 
 class SwitchWidget extends StatefulWidget {
   const SwitchWidget({super.key});
@@ -13,7 +20,6 @@ class SwitchWidget extends StatefulWidget {
 }
 
 class _SwitchWidgetState extends State<SwitchWidget> {
-  static const platform = const MethodChannel('samples.flutter.dev/pinWidget');
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -31,12 +37,13 @@ class _SwitchWidgetState extends State<SwitchWidget> {
             children: [
               InkWell(
                 onTap: () async {
-                 try {
-                    await platform.invokeMethod('pinWidget');
-                  } catch (e) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Error: $e')),
-                    );
+                  // Choose between manual instructions or preview + native dialog
+                  if (USE_MANUAL_INSTRUCTIONS) {
+                    // Option 1: Show manual instructions (no native dialog)
+                    await WidgetInstructionsDialog.show(context);
+                  } else {
+                    // Option 2: Show preview dialog (native dialog will follow)
+                    await WidgetPinPreviewDialog.show(context);
                   }
                 },
                 child: Container(
