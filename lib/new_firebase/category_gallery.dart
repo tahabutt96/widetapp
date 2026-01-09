@@ -2,6 +2,7 @@ import 'package:appwidgetflutter/common/backgorund_image.dart';
 import 'package:appwidgetflutter/common/menu_button.dart';
 import 'package:appwidgetflutter/common/switch_button_widget.dart';
 import 'package:appwidgetflutter/new_firebase/common/drawer_widget.dart';
+import 'package:appwidgetflutter/new_firebase/models/category_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -29,16 +30,180 @@ class _CategoriesGalleryState extends State<CategoriesGallery> {
   String? category;
   String? ayat;
   final key = GlobalKey<ScaffoldState>();
+  List<CategoryItem> allCategories = getAllCategories();
+
   void isGetMethod() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     setState(() {
-      
+
     category = sp.getString('Category');
     print("==> Get Cat${category = sp.getString('Category')}");
     ayat = sp.getString('');
     print("==> Get Ayat${ayat = sp.getString('CompletAyat')}");
     });
   }
+
+  Future<void> selectCategory(String categoryName) async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    await sp.setString('Category', categoryName);
+    setState(() {
+      category = categoryName;
+      isShowContainer = false;
+    });
+    // Update widget data
+    await HomeWidget.saveWidgetData<String>('category', categoryName);
+    await HomeWidget.updateWidget(
+        name: 'AppWidgetProvider', iOSName: 'AppWidgetProvider');
+  }
+
+  Future<void> showCategoryDialog() async {
+    final selectedCategory = await showDialog<String>(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          insetPadding: EdgeInsets.all(10),
+          child: Container(
+            width: double.infinity,
+            height: MediaQuery.of(context).size.height * 0.8,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Column(
+              children: [
+                // Header
+                Container(
+                  padding: EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: ColorResources.THEMECOLOR,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      IconButton(
+                        icon: Icon(Icons.close, color: Colors.white),
+                        onPressed: () => Navigator.of(context).pop(),
+                      ),
+                      Text(
+                        'اختر الفئة',
+                        style: GoogleFonts.cairo(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                      SizedBox(width: 48), // Balance the close button
+                    ],
+                  ),
+                ),
+                // Categories List
+                Expanded(
+                  child: ListView.builder(
+                    padding: EdgeInsets.symmetric(vertical: 10),
+                    itemCount: allCategories.length,
+                    itemBuilder: (context, index) {
+                      final cat = allCategories[index];
+                      final isSelected = category == cat.name;
+
+                      return InkWell(
+                        onTap: () {
+                          Navigator.of(context).pop(cat.name);
+                        },
+                        child: Container(
+                          margin: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                          decoration: BoxDecoration(
+                            color: isSelected
+                              ? ColorResources.THEMECOLOR.withAlpha((0.1 * 255).toInt())
+                              : Colors.white,
+                            borderRadius: BorderRadius.circular(15),
+                            border: Border.all(
+                              color: isSelected
+                                ? ColorResources.THEMECOLOR
+                                : Colors.grey.withAlpha((0.3 * 255).toInt()),
+                              width: isSelected ? 2 : 1,
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              // Checkmark
+                              Container(
+                                width: 24,
+                                height: 24,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: isSelected
+                                    ? ColorResources.THEMECOLOR
+                                    : Colors.transparent,
+                                  border: Border.all(
+                                    color: isSelected
+                                      ? ColorResources.THEMECOLOR
+                                      : Colors.grey.withAlpha((0.5 * 255).toInt()),
+                                    width: 2,
+                                  ),
+                                ),
+                                child: isSelected
+                                  ? Icon(
+                                      Icons.check,
+                                      color: Colors.white,
+                                      size: 16,
+                                    )
+                                  : null,
+                              ),
+                              SizedBox(width: 12),
+                              // Category Name
+                              Expanded(
+                                child: Text(
+                                  cat.name,
+                                  textAlign: TextAlign.right,
+                                  style: GoogleFonts.cairo(
+                                    fontSize: 18,
+                                    fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                                    color: isSelected
+                                      ? ColorResources.THEMECOLOR
+                                      : ColorResources.BOTTOM_BAR_SELECTED,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 12),
+                              // Icon with teal background
+                              Container(
+                                width: 50,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                  color: ColorResources.THEMECOLOR.withAlpha((0.15 * 255).toInt()),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Icon(
+                                  cat.icon ?? Icons.circle,
+                                  size: 28
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+
+    if (selectedCategory != null) {
+      await selectCategory(selectedCategory);
+    }
+  }
+
   bool? selected;
   @override
   void initState() {
@@ -104,100 +269,49 @@ class _CategoriesGalleryState extends State<CategoriesGallery> {
                                   ),
                                 ),
                                 
-                                Container(
-                                  margin: EdgeInsets.symmetric(horizontal: 20.0),
-                                  decoration: BoxDecoration(
-                                    color: ColorResources.WHITE,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey,
-                                        blurRadius: 1,
+                                InkWell(
+                                  onTap: showCategoryDialog,
+                                  child: Container(
+                                    margin: EdgeInsets.symmetric(horizontal: 20.0),
+                                    padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
+                                    decoration: BoxDecoration(
+                                      color: ColorResources.WHITE,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withAlpha((0.3 * 255).toInt()),
+                                          blurRadius: 4,
+                                          offset: Offset(0, 2),
+                                        ),
+                                      ],
+                                      borderRadius: BorderRadius.circular(30),
+                                      border: Border.all(
+                                        color: ColorResources.THEMECOLOR.withAlpha((0.3 * 255).toInt()),
+                                        width: 1,
                                       ),
-                                    ],
-                                    borderRadius: BorderRadius.only(
-                                      topLeft: isShowContainer?Radius.circular(30):Radius.circular(30),
-                                      topRight: isShowContainer?Radius.circular(30):Radius.circular(30),
-                                      bottomLeft: isShowContainer?Radius.circular(0):Radius.circular(30),
-                                      bottomRight: isShowContainer?Radius.circular(0):Radius.circular(30),
                                     ),
-                                   ),
-                                    child: Column(
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                      Card(
-                                          elevation:isShowContainer?1: 0,
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(30)),
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              InkWell(
-                                                onTap: () {
-                                                    setState(() {
-                                                      isShowContainer=!isShowContainer;
-                                                    });
-                                                },
-                                                child: Padding(
-                                                  padding: const EdgeInsets.all(8.0),
-                                                  child: Image.asset(
-                                                    Images.share,
-                                                    width: 20,
-                                                    height: 17,
-                                                  ),
-                                                ),
-                                              ),
-                                              // ListTile(
-                                              //   dense: true,
-                                              //   shape: RoundedRectangleBorder(
-                                              //       borderRadius:
-                                              //           BorderRadius.circular(30)),
-                                              //   visualDensity: VisualDensity(
-                                              //       horizontal: 0, vertical: -1),
-                                              //   tileColor: ColorResources.WHITE,
-                                              //   leading: InkWell(
-                                              //     onTap: (){
-                                              //       setState(() {
-                                              //         isShowContainer=!isShowContainer;
-                                              //       });
-                                              //     },
-                                              //     child: Padding(
-                                              //       padding: const EdgeInsets.all(8.0),
-                                              //       child: Image.asset(
-                                              //         Images.share,
-                                              //         width: 20,
-                                              //         height: 17,
-                                              //       ),
-                                              //     ),
-                                              //   ),
-                                              // ),
-                                              Padding(
-                                                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                                child: Text(
-                                                  category??"الفئة",
-                                                  maxLines: 1,
-                                                  overflow: TextOverflow.ellipsis,
-                                                  style: GoogleFonts.lexend(
-                                                    fontSize: 18,
-                                                    fontWeight: FontWeight.w500,
-                                                    color: ColorResources.BOTTOM_BAR_SELECTED),
-                                                  textDirection: TextDirection.rtl),
-                                              ),
-                                            ],
-                                          )),
-                                          isShowContainer?
-                                      Container(
-                                          padding:
-                                              EdgeInsets.symmetric(horizontal: 12),
-                                          child: Text(
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                color: ColorResources
-                                                    .BOTTOM_BAR_SELECTED,
-                                                fontWeight: FontWeight.bold),
-                                            "يمكنك اختيار التصنيف الذي تريده من خلال الذهاب الى صفحة التصنيفات ثم الضغط على التصنيف والضغط على زر ",
-                                            textAlign: TextAlign.center,
-                                          )):Container(),
-                                    ])),
+                                        Icon(
+                                          Icons.arrow_drop_down,
+                                          color: ColorResources.THEMECOLOR,
+                                          size: 28,
+                                        ),
+                                        Text(
+                                          category ?? "الفئة",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: GoogleFonts.cairo(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w600,
+                                            color: ColorResources.THEMECOLOR,
+                                          ),
+                                          textDirection: TextDirection.rtl,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
                                 SizedBox(height: 10),
                                 // Text("موضوع القطعة",
                                 //     style: GoogleFonts.lexend(
