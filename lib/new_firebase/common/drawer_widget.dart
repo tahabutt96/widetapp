@@ -17,26 +17,26 @@ class MobileDrawerWidget extends StatelessWidget {
       child: ListView(
         padding: EdgeInsets.only(top: 10.0),
         children: [
-          SafeArea(
-            child: Container(
-              height: 25.0,
-              child: Center(
-                child: Image.asset(
-                Images.splash_logo, 
-                height: 50.0, 
-                width: double.infinity
-              ),
-              ),
-            ),
-          ),
-          SizedBox(
-            height: 10.0,
-          ),
-          Divider(
-            height: 2.0,
-            thickness: 1.0,
-            color: ColorResources.THEMECOLOR,
-          ),
+          // SafeArea(
+          //   child: Container(
+          //     height: 25.0,
+          //     child: Center(
+          //       child: Image.asset(
+          //       Images.splash_logo, 
+          //       height: 50.0, 
+          //       width: double.infinity
+          //     ),
+          //     ),
+          //   ),
+          // ),
+          // SizedBox(
+          //   height: 10.0,
+          // ),
+          // Divider(
+          //   height: 2.0,
+          //   thickness: 1.0,
+          //   color: ColorResources.THEMECOLOR,
+          // ),
           SizedBox(
             height: 10.0,
           ),

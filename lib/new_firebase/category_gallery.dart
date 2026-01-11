@@ -3,13 +3,15 @@ import 'package:appwidgetflutter/common/menu_button.dart';
 import 'package:appwidgetflutter/common/switch_button_widget.dart';
 import 'package:appwidgetflutter/new_firebase/common/drawer_widget.dart';
 import 'package:appwidgetflutter/new_firebase/models/category_item.dart';
-import 'package:appwidgetflutter/new_firebase/services/excel_service.dart';
-import 'package:appwidgetflutter/new_firebase/verses_by_category_screen.dart';
+import 'package:appwidgetflutter/new_firebase/services/json_service.dart';
+import 'package:appwidgetflutter/new_firebase/services/favorites_service.dart';
+import 'package:appwidgetflutter/new_firebase/models/verse_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:share_plus/share_plus.dart';
 import '../utills/colors_resources.dart';
 import '../utills/images_sources.dart';
 
@@ -46,94 +48,8 @@ class _CategoriesGalleryState extends State<CategoriesGallery> {
   }
 
   Future<void> selectCategory(String categoryName) async {
-    OverlayEntry? loadingOverlay;
-
     try {
-      print('📱 Starting selectCategory for: $categoryName');
-
-      // Create a FULL SCREEN overlay that appears on top of EVERYTHING
-      print('📱 Creating loading overlay...');
-      loadingOverlay = OverlayEntry(
-        //opaque: true,
-        builder: (BuildContext overlayContext) {
-          return Material(
-            color: Colors.black.withAlpha((0.75 * 255).toInt()), // Even darker background
-            child: PopScope(
-              canPop: false, // Prevent back button
-              child: Center(
-                child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: 40),
-                  padding: EdgeInsets.all(35),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(25),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withAlpha((0.4 * 255).toInt()),
-                        blurRadius: 25,
-                        spreadRadius: 8,
-                        offset: Offset(0, 15),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      // Loading spinner - LARGER
-                      SizedBox(
-                        width: 70,
-                        height: 70,
-                        child: CircularProgressIndicator(
-                          color: ColorResources.THEMECOLOR,
-                          strokeWidth: 6,
-                        ),
-                      ),
-                      SizedBox(height: 35),
-                      // Loading text - LARGER
-                      Text(
-                        'جاري تحميل الآيات...',
-                        style: GoogleFonts.cairo(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          color: ColorResources.BOTTOM_BAR_SELECTED,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      SizedBox(height: 20),
-                      // Category name - LARGER
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                        decoration: BoxDecoration(
-                          color: ColorResources.THEMECOLOR.withAlpha((0.15 * 255).toInt()),
-                          borderRadius: BorderRadius.circular(18),
-                        ),
-                        child: Text(
-                          categoryName,
-                          style: GoogleFonts.cairo(
-                            fontSize: 19,
-                            fontWeight: FontWeight.w600,
-                            color: ColorResources.THEMECOLOR,
-                          ),
-                          textAlign: TextAlign.center,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          );
-        },
-      );
-
-      // Insert overlay at the TOP of the overlay stack
-      Overlay.of(context).insert(loadingOverlay);
-      print('📱 Loading overlay inserted - should be FULLY VISIBLE now');
-
-      // Wait for overlay to render
-      await Future.delayed(Duration(milliseconds: 100));
+      print('📱 Selecting category: $categoryName');
 
       // Save category to preferences
       SharedPreferences sp = await SharedPreferences.getInstance();
@@ -144,39 +60,28 @@ class _CategoriesGalleryState extends State<CategoriesGallery> {
         isShowContainer = false;
       });
 
-      print('📱 Loading verses from Excel...');
-      // Pre-load the verses (this will use cache if available)
-      final verses = await ExcelService.getVersesByCategory(categoryName);
+      // Load verses from JSON
+      print('📱 Loading verses from JSON...');
+      final verses = await JsonService.getVersesByCategory(categoryName);
       print('📱 Verses loaded: ${verses.length}');
 
-      // Remove loading overlay
-      print('📱 Removing loading overlay...');
-      loadingOverlay.remove();
-      loadingOverlay = null;
-      print('📱 Overlay removed');
+      if (verses.isNotEmpty) {
+        // Get first verse to update widget
+        final firstVerse = verses[0];
+        await _sendAndUpdate(categoryName, firstVerse.verse);
 
-      // Small delay before navigation
-      await Future.delayed(Duration(milliseconds: 100));
-
-      // Navigate to verses screen
-      print('📱 Navigating to verses screen...');
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => VersesByCategoryScreen(
-            categoryName: categoryName,
-            preloadedVerses: verses, // Pass pre-loaded verses
+        // Show ayats dialog
+        //await showAyatsDialog(categoryName, verses);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('لا توجد آيات في هذه الفئة'),
+            backgroundColor: Colors.orange,
           ),
-        ),
-      );
-      print('📱 Navigation complete');
+        );
+      }
     } catch (e) {
       print('❌ Error selecting category: $e');
-
-      // Remove loading overlay if it exists
-      if (loadingOverlay != null) {
-        loadingOverlay.remove();
-      }
 
       // Show error message to user
       ScaffoldMessenger.of(context).showSnackBar(
@@ -187,7 +92,7 @@ class _CategoriesGalleryState extends State<CategoriesGallery> {
       );
     }
   }
-
+ 
   Future<void> showCategoryDialog() async {
     final selectedCategory = await showDialog<String>(
       context: context,
@@ -363,16 +268,16 @@ class _CategoriesGalleryState extends State<CategoriesGallery> {
             builder: (BuildContext context) {
               return Column(
                 children: [
-              Container(
-                height: 70.0,
-                child: Center(
-                 child: Image.asset(
-                  Images.splash_logo, 
-                  height: 50.0, 
-                  width: double.infinity
-                ),
-               ),
-              ),
+              // Container(
+              //   height: 70.0,
+              //   child: Center(
+              //    child: Image.asset(
+              //     Images.splash_logo, 
+              //     height: 50.0, 
+              //     width: double.infinity
+              //   ),
+              //  ),
+              // ),
                   Expanded(
                     child: SingleChildScrollView(
                       child: Column(
@@ -403,7 +308,7 @@ class _CategoriesGalleryState extends State<CategoriesGallery> {
                                 Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
                                   child: Text(
-                                    "فئة القطعة",
+                                    "ما هو شعورك الآن؟",
                                     style: GoogleFonts.lexend(
                                       fontWeight: FontWeight.w600,
                                       fontSize: 20,

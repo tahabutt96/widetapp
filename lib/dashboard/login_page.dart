@@ -29,7 +29,7 @@ class _LoginScreenState extends State<LoginScreen> {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset(Images.splash_logo,width: 300,),
+          //Image.asset(Images.splash_logo,width: 300,),
           Column(
             children: [
               _UserDetailsState(

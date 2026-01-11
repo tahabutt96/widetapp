@@ -17,17 +17,17 @@ class ShareScreen extends StatelessWidget {
       body: BackgroundImage(
         child: Column(
           children: [
-            Container(
-              margin: EdgeInsets.only(top: 20.0),
-                height: 70.0,
-                child: Center(
-                 child: Image.asset(
-                  Images.splash_logo, 
-                  height: 50.0, 
-                  width: double.infinity
-                ),
-               ),
-              ),
+            // Container(
+            //   margin: EdgeInsets.only(top: 20.0),
+            //     height: 70.0,
+            //     child: Center(
+            //      child: Image.asset(
+            //       Images.splash_logo, 
+            //       height: 50.0, 
+            //       width: double.infinity
+            //     ),
+            //    ),
+            //   ),
               isShowBack! ?
               BackButtonWidget():Container(),
             Expanded(

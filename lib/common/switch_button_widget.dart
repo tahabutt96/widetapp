@@ -70,7 +70,7 @@ class _SwitchWidgetState extends State<SwitchWidget> {
                 ),
               ),
               Text(
-                "أداة الشاشة",
+                "تفعيل الويدجت",
                 style: GoogleFonts.lexend(
                     fontSize: 18,
                     fontWeight: FontWeight.w500,
@@ -109,6 +109,13 @@ class _CustomSwitchState extends State<CustomSwitch> {
           setState(() {
             isSwitchValue = !isSwitchValue;
           });
+           ScaffoldMessenger.of(context).showSnackBar(
+                                                  SnackBar(
+                                                    content: Text("تم إضافة الويدجت الى شاشتك الرئيسية بنجاح"),
+                                                    backgroundColor: ColorResources.THEMECOLOR,
+                                                    duration: Duration(seconds: 5),
+                                                  ),
+                                                );
           // _sendData(b);
           // if(SharePrefs.getSwitchValue()==null){
           //   await platform.invokeMethod('pinWidget');

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:iconsax_plus/iconsax_plus.dart';
 
 class CategoryItem {
   final String name;
@@ -16,7 +18,7 @@ class CategoryItem {
 // Categories from "test developer.xlsx" - EXACT names from Excel file
 List<CategoryItem> getAllCategories() {
   return [
-    CategoryItem(name: 'هم وحزن', emoji: '😔', icon: Icons.nights_stay_rounded),
+    CategoryItem(name: 'هم وحزن', emoji: '😔', icon: FontAwesomeIcons.faceFrown),
     CategoryItem(name: 'توفى شخص عزيز', emoji: '😢', icon: Icons.person_off_rounded),
     CategoryItem(name: 'اشعر بالوحدة', emoji: '😞', icon: Icons.person_outline_rounded),
     CategoryItem(name: 'انتهى صبري', emoji: '😤', icon: Icons.hourglass_empty_rounded),
@@ -26,11 +28,11 @@ List<CategoryItem> getAllCategories() {
     CategoryItem(name: 'اشعر بالعجز والكسل', emoji: '😑', icon: Icons.battery_0_bar_rounded),
     CategoryItem(name: 'اشعر بالقلق والخوف', emoji: '😨', icon: Icons.psychology_alt_rounded),
     CategoryItem(name: 'اشعر بضيق الرزق', emoji: '💸', icon: Icons.account_balance_wallet_rounded),
-    CategoryItem(name: 'ارتكبت ذنب', emoji: '😓', icon: Icons.error_outline_rounded),
+    CategoryItem(name: 'ارتكبت ذنب', emoji: '😓', icon: IconsaxPlusLinear.emoji_sad),
     CategoryItem(name: 'احتاج الى الرضا والقناعة', emoji: '😌', icon: Icons.eco_rounded),
     CategoryItem(name: 'ارغب في التغيير وبداية جديدة', emoji: '🌟', icon: Icons.wb_sunny_rounded),
     CategoryItem(name: 'كيف اتعامل مع الناس', emoji: '🤔', icon: Icons.people_outline_rounded),
-    CategoryItem(name: 'اشعر بالخذلان وعدم التقدير', emoji: '😢', icon: Icons.cloud_off_rounded),
+    CategoryItem(name: 'اشعر بالخذلان وعدم التقدير', emoji: '😢', icon: FontAwesomeIcons.thumbsDown),
     CategoryItem(name: 'اريد التقرب من الله', emoji: '🤲', icon: Icons.favorite_rounded),
   ];
 }

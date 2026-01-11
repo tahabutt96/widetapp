@@ -50,14 +50,8 @@ class WidgetPinPreviewDialog extends StatelessWidget {
               padding: EdgeInsets.all(20),
               child: Column(
                 children: [
-                  Icon(
-                    Icons.widgets_rounded,
-                    color: Colors.white,
-                    size: 48,
-                  ),
-                  SizedBox(height: 12),
                   Text(
-                    'إضافة أداة الشاشة',
+                    'اضف الويدجت إلى الشاشة الرئيسية',
                     style: GoogleFonts.cairo(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -67,7 +61,7 @@ class WidgetPinPreviewDialog extends StatelessWidget {
                   ),
                   SizedBox(height: 8),
                   Text(
-                    'اعرض آياتك المفضلة على شاشتك الرئيسية',
+                    'اختر حالتك النفسية الآن، ودع آيات الله تملأ قلبك بالسكينة',
                     style: GoogleFonts.cairo(
                       fontSize: 14,
                       color: Colors.white.withAlpha((0.9 * 255).toInt()),
@@ -84,8 +78,8 @@ class WidgetPinPreviewDialog extends StatelessWidget {
               child: FutureBuilder<Map<String, String>>(
                 future: _getWidgetData(),
                 builder: (context, snapshot) {
-                  final message = snapshot.data?['message'] ?? 'بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ';
-                  final category = snapshot.data?['category'] ?? 'آية اليوم';
+                  final message = "كَلا إِنَّ مَعِيَ رَبِّي سَيَهْدِينِ";//snapshot.data?['message'] ?? 'بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ';
+                  final category = "اشعر بالخوف";//snapshot.data?['category'] ?? 'آية اليوم';
 
                   return _WidgetPreviewCard(
                     message: message,
@@ -98,30 +92,33 @@ class WidgetPinPreviewDialog extends StatelessWidget {
             SizedBox(height: 10),
 
             // Info Section
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 30),
-              padding: EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.white.withAlpha((0.15 * 255).toInt()),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Column(
-                children: [
-                  _InfoRow(
-                    icon: Icons.auto_awesome,
-                    text: 'تحديث تلقائي للآيات',
-                  ),
-                  SizedBox(height: 8),
-                  _InfoRow(
-                    icon: Icons.touch_app,
-                    text: 'اضغط للانتقال للتطبيق',
-                  ),
-                  SizedBox(height: 8),
-                  _InfoRow(
-                    icon: Icons.favorite_border,
-                    text: 'أضف للمفضلة مباشرة',
-                  ),
-                ],
+            Directionality(
+              textDirection: TextDirection.rtl,
+              child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 30),
+                padding: EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white.withAlpha((0.15 * 255).toInt()),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Column(
+                  children: [
+                    _InfoRow(
+                      icon: Icons.auto_awesome,
+                      text: 'تحديث تلقائي للآيات',
+                    ),
+                    SizedBox(height: 8),
+                    _InfoRow(
+                      icon: Icons.touch_app,
+                      text: 'رسائل الله لا تنتهي: اختر ما تشعر به لتصلك الآية المناسبة',
+                    ),
+                    SizedBox(height: 8),
+                    _InfoRow(
+                      icon: Icons.favorite_border,
+                      text: 'أضف للمفضلة مباشرة',
+                    ),
+                  ],
+                ),
               ),
             ),
 

@@ -33,169 +33,171 @@ void dispose(){
 @override
 Widget build(BuildContext context) {
 	return Scaffold(
-	body: Container(
-    height: MediaQuery.of(context).size.height,
-    width: MediaQuery.of(context).size.width,
-    decoration: BoxDecoration(
-      image: DecorationImage(image: AssetImage(Images.slider_background))
+	body: SafeArea(
+      child: Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(
+            image: DecorationImage(image: AssetImage(Images.slider_background))
+          ),
+        child: Column(
+          children: [
+          Expanded(
+            child: PageView.builder(
+           controller: _controller,
+              scrollDirection: Axis.horizontal,
+              onPageChanged: (value){
+              setState(() {
+                currentIndex = value;
+              });
+              },
+              itemCount: slides.length,
+              itemBuilder: (context, index){
+         
+              // contents of slider
+              return Column(
+             mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+               Padding(
+                 padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
+                 child: Text(slides[index].getDescription(),
+                   textAlign: TextAlign.center,
+                   style: GoogleFonts.urbanist(
+                     fontSize: 18.0,
+                     color: Color(0xFF212121),
+                     fontWeight: FontWeight.w500,
+                   ),
+                 ),
+               ),
+                  Slider(
+                    image: slides[index].getImage(),
+                  ),
+                ],
+              );
+              }
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left:20.0, bottom: 20.0),
+            child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(slides.length, (index) => buildDot(index, context),
+            ),
+            ),
+          ),
+            if(currentIndex == 0) 
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: SliderButton(
+                text: 'التالي', 
+                textColor: Colors.white, 
+                buttonColor: ColorResources.THEMECOLOR, 
+                onPressed: (){
+                  _controller!.nextPage(duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
+                },
+              ),
+            )
+            else if(currentIndex == 1)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: SliderButton(
+                    text: 'رجوع', 
+                    textColor: ColorResources.THEMECOLOR, 
+                    buttonColor: ColorResources.BOTTOM_BAR, 
+                    onPressed: (){
+                      _controller!.previousPage(duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
+                    },
+                          ),
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                Expanded(
+                  child: SliderButton(
+                    text: 'التالي', 
+                    textColor: Colors.white, 
+                    buttonColor: ColorResources.THEMECOLOR, 
+                    onPressed: (){
+                      _controller!.nextPage(duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
+                    },
+                  ),
+                ),
+                ],
+              ),
+            )
+            else if ( currentIndex == 2)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: SliderButton(
+                    text: 'رجوع', 
+                    textColor: ColorResources.THEMECOLOR, 
+                    buttonColor: ColorResources.BOTTOM_BAR, 
+                    onPressed: (){
+                      _controller!.previousPage(duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
+                    },
+                          ),
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                Expanded(
+                  child: SliderButton(
+                    text: 'التالي', 
+                    textColor: Colors.white, 
+                    buttonColor: ColorResources.THEMECOLOR, 
+                    onPressed: (){
+                      _controller!.nextPage(duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
+                    },
+                  ),
+                ),
+                ],
+              ),
+            )
+            else if (currentIndex == 3)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: SliderButton(
+                    text: 'رجوع', 
+                    textColor: ColorResources.THEMECOLOR, 
+                    buttonColor: ColorResources.BOTTOM_BAR, 
+                    onPressed: (){
+                      _controller!.previousPage(duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
+                    },
+                          ),
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                Expanded(
+                  child: SliderButton(
+                    text: 'لا تظهر مرة أخرى', 
+                    textColor: Colors.white, 
+                    buttonColor: ColorResources.THEMECOLOR, 
+                    onPressed: (){
+                      SharePrefs.setSliderValue(false);
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> MyHomePage(selectedIndex: 2,info: "widget",)));
+                    },
+                  ),
+                ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 15.0,
+            ),
+          ],
+        ),
+      ),
     ),
-	  child: Column(
-	    children: [
-	    Expanded(
-	      child: PageView.builder(
-	     controller: _controller,
-	        scrollDirection: Axis.horizontal,
-	        onPageChanged: (value){
-	        setState(() {
-	          currentIndex = value;
-	        });
-	        },
-	        itemCount: slides.length,
-	        itemBuilder: (context, index){
-   
-	        // contents of slider
-	        return Column(
-	       mainAxisAlignment: MainAxisAlignment.center,
-	          children: [
-	         Padding(
-	           padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
-	           child: Text(slides[index].getDescription(),
-	             textAlign: TextAlign.center,
-	             style: GoogleFonts.urbanist(
-	               fontSize: 18.0,
-	               color: Color(0xFF212121),
-	               fontWeight: FontWeight.w500,
-	             ),
-	           ),
-	         ),
-	            Slider(
-	              image: slides[index].getImage(),
-	            ),
-	          ],
-	        );
-	        }
-	      ),
-	    ),
-	    Padding(
-	      padding: const EdgeInsets.only(left:20.0, bottom: 20.0),
-	      child: Row(
-	      mainAxisAlignment: MainAxisAlignment.center,
-	      children: List.generate(slides.length, (index) => buildDot(index, context),
-	      ),
-	      ),
-	    ),
-      if(currentIndex == 0) 
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15.0),
-        child: SliderButton(
-          text: 'التالي', 
-          textColor: Colors.white, 
-          buttonColor: ColorResources.THEMECOLOR, 
-          onPressed: (){
-            _controller!.nextPage(duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
-          },
-        ),
-      )
-      else if(currentIndex == 1)
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15.0),
-        child: Row(
-          children: [
-            Expanded(
-              child: SliderButton(
-              text: 'رجوع', 
-              textColor: ColorResources.THEMECOLOR, 
-              buttonColor: ColorResources.BOTTOM_BAR, 
-              onPressed: (){
-                _controller!.previousPage(duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
-              },
-                    ),
-            ),
-            SizedBox(
-              width: 10.0,
-            ),
-          Expanded(
-            child: SliderButton(
-              text: 'التالي', 
-              textColor: Colors.white, 
-              buttonColor: ColorResources.THEMECOLOR, 
-              onPressed: (){
-                _controller!.nextPage(duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
-              },
-            ),
-          ),
-          ],
-        ),
-      )
-      else if ( currentIndex == 2)
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15.0),
-        child: Row(
-          children: [
-            Expanded(
-              child: SliderButton(
-              text: 'رجوع', 
-              textColor: ColorResources.THEMECOLOR, 
-              buttonColor: ColorResources.BOTTOM_BAR, 
-              onPressed: (){
-                _controller!.previousPage(duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
-              },
-                    ),
-            ),
-            SizedBox(
-              width: 10.0,
-            ),
-          Expanded(
-            child: SliderButton(
-              text: 'التالي', 
-              textColor: Colors.white, 
-              buttonColor: ColorResources.THEMECOLOR, 
-              onPressed: (){
-                _controller!.nextPage(duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
-              },
-            ),
-          ),
-          ],
-        ),
-      )
-      else if (currentIndex == 3)
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15.0),
-        child: Row(
-          children: [
-            Expanded(
-              child: SliderButton(
-              text: 'رجوع', 
-              textColor: ColorResources.THEMECOLOR, 
-              buttonColor: ColorResources.BOTTOM_BAR, 
-              onPressed: (){
-                _controller!.previousPage(duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
-              },
-                    ),
-            ),
-            SizedBox(
-              width: 10.0,
-            ),
-          Expanded(
-            child: SliderButton(
-              text: 'لا تظهر مرة أخرى', 
-              textColor: Colors.white, 
-              buttonColor: ColorResources.THEMECOLOR, 
-              onPressed: (){
-                SharePrefs.setSliderValue(false);
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> MyHomePage(selectedIndex: 2,info: "widget",)));
-              },
-            ),
-          ),
-          ],
-        ),
-      ),
-      SizedBox(
-        height: 15.0,
-      ),
-	    ],
-	  ),
-	),
 	);
 }
 

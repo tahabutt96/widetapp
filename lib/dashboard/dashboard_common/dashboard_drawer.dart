@@ -16,13 +16,13 @@ class DrawerWidget extends StatelessWidget {
       color: ColorResources.dashboardColor,
       child: Column(
         children: [
-          AppBar(
-            automaticallyImplyLeading: false,
-            elevation: 0.0,
-            backgroundColor: ColorResources.dashboardColor,
-            title: Image.asset(Images.splash_logo),
-          ),
-          const Divider(color: ColorResources.WHITE,),
+          // AppBar(
+          //   automaticallyImplyLeading: false,
+          //   elevation: 0.0,
+          //   backgroundColor: ColorResources.dashboardColor,
+          //   title: Image.asset(Images.splash_logo),
+          // ),
+          // const Divider(color: ColorResources.WHITE,),
           Expanded(
             child: ListView(
               controller: ScrollController(),
