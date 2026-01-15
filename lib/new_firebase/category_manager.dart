@@ -90,7 +90,7 @@ class _CategoryManagerState extends State<CategoryManager> {
   @override
   void initState() {
     final length = Provider.of<CircleButtonProvider>(context, listen: false);
-    if(length.getForwardCounter == 1){
+    if(length.getForwardCounter == 1 && widget.categoryId != null){
      length.setForwardCounter(widget.categoryId!);
     }
     if(widget.index!=0 && widget.index!=null){

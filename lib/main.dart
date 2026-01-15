@@ -2,7 +2,8 @@ import 'package:appwidgetflutter/ads_manager.dart';
 import 'package:appwidgetflutter/common/share_prefs.dart';
 import 'package:appwidgetflutter/dashboard/models/add_aya_model.dart';
 import 'package:appwidgetflutter/mobile_provider/circle_button_provider.dart';
-import 'package:appwidgetflutter/new_firebase/category_manager.dart';
+import 'package:appwidgetflutter/new_firebase/json_category_manager.dart';
+import 'package:appwidgetflutter/new_firebase/services/favorites_service.dart';
 import 'package:appwidgetflutter/new_firebase/on_boarding_screen.dart';
 import 'package:appwidgetflutter/new_firebase/share_screen.dart';
 import 'package:appwidgetflutter/routes/router.dart';
@@ -234,37 +235,28 @@ class _MyHomePageState extends State<MyHomePage> {
           );
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => CategoryManager(
-                category: category,
-                categoryId: categoryId,
-                index: index,
+              builder: (context) => JsonCategoryManager(
+                category: category ?? '',
+                initialIndex: index ?? 0,
+                verseText: aya,
               ),
             ),
           );
         }
       } else if (uri.host == "favourite") {
         final category = await HomeWidget.getWidgetData('category');
-        final categoryId = await HomeWidget.getWidgetData('categoryId');
         final index = await HomeWidget.getWidgetData("index");
-        var favCatManager = Provider.of<FavCategoryManager>(
-          context,
-          listen: false,
-        );
-        final aya = await HomeWidget.getWidgetData('favourite');
+        final aya = await HomeWidget.getWidgetData('message');
         if (aya != null) {
-          List<AddAyaModel> ayaList = AddAyaModel.decode(aya);
-          bool isFav = getWallpapersOfCurrentCategory(
-            ayaList[0],
-            context,
-            false,
-          );
+          // Toggle favorite using local FavoritesService
+          bool isFav = await FavoritesService.isFavorite(aya);
           if (isFav) {
-            favCatManager.removeFromFav(ayaList[0]);
+            await FavoritesService.removeFavorite(aya);
             ScaffoldMessenger.of(
               context,
             ).showSnackBar(snackBar("إزالتها من المفضلة"));
           } else {
-            favCatManager.addToFav(ayaList[0]);
+            await FavoritesService.addFavorite(aya);
             ScaffoldMessenger.of(
               context,
             ).showSnackBar(snackBar("تمت الإضافة إلى المفضلة"));
@@ -282,10 +274,10 @@ class _MyHomePageState extends State<MyHomePage> {
           );
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => CategoryManager(
-                category: category,
-                categoryId: categoryId,
-                index: index,
+              builder: (context) => JsonCategoryManager(
+                category: category ?? '',
+                initialIndex: index ?? 0,
+                verseText: aya,
               ),
             ),
           );
@@ -299,7 +291,6 @@ class _MyHomePageState extends State<MyHomePage> {
         );
       } else if (uri.host == "message") {
         final category = await HomeWidget.getWidgetData('category');
-        final categoryId = await HomeWidget.getWidgetData('categoryId');
         final index = await HomeWidget.getWidgetData("index");
         final aya = await HomeWidget.getWidgetData('message');
         if (aya != null) {
@@ -316,10 +307,10 @@ class _MyHomePageState extends State<MyHomePage> {
           );
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => CategoryManager(
-                category: category,
-                categoryId: categoryId,
-                index: index,
+              builder: (context) => JsonCategoryManager(
+                category: category ?? '',
+                initialIndex: index ?? 0,
+                verseText: aya,
               ),
             ),
           );

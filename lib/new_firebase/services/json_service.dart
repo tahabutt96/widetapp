@@ -206,4 +206,60 @@ class JsonService {
     _cachedCategories = null;
     _cachedCategoryVerses = null;
   }
+
+  /// Find the category that a verse belongs to by matching verse text
+  static Future<String?> findCategoryForVerse(String verseText) async {
+    try {
+      final jsonData = await loadJsonFromAssets();
+      final List<dynamic> sheet1 = jsonData['Sheet1'] ?? [];
+
+      if (sheet1.isEmpty) {
+        return null;
+      }
+
+      // Skip first row (headers) and search data rows
+      for (int i = 1; i < sheet1.length; i++) {
+        final Map<String, dynamic> row = sheet1[i];
+        final rowVerseText = row['Column1']?.toString() ?? '';
+
+        // Check if this row's verse matches (partial match for flexibility)
+        if (rowVerseText.isNotEmpty &&
+            (rowVerseText.contains(verseText) || verseText.contains(rowVerseText))) {
+          // Find the first category this verse belongs to
+          String? category;
+          row.forEach((key, value) {
+            if (key != 'Column1' && value == true && category == null) {
+              category = key.trim();
+            }
+          });
+          if (category != null) {
+            print('✅ Found category "$category" for verse');
+            return category;
+          }
+        }
+      }
+
+      print('❌ No category found for verse');
+      return null;
+    } catch (e) {
+      print('❌ Error finding category for verse: $e');
+      return null;
+    }
+  }
+
+  /// Get the index of a verse within its category
+  static Future<int> findVerseIndexInCategory(String category, String verseText) async {
+    try {
+      final verses = await getVersesByCategory(category);
+      for (int i = 0; i < verses.length; i++) {
+        if (verses[i].verse.contains(verseText) || verseText.contains(verses[i].verse)) {
+          return i;
+        }
+      }
+      return 0;
+    } catch (e) {
+      print('❌ Error finding verse index: $e');
+      return 0;
+    }
+  }
 }
