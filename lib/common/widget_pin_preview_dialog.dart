@@ -173,7 +173,7 @@ class WidgetPinPreviewDialog extends StatelessWidget {
                           Icon(Icons.add_circle_outline, size: 20),
                           SizedBox(width: 8),
                           Text(
-                            'إضافة الأداة',
+                          'أضف الويدجت',
                             style: GoogleFonts.cairo(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,

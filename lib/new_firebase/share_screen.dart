@@ -37,8 +37,9 @@ class ShareScreen extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      "نتمنى أن يصل هذا التطبيق لمليون مستخدم يوما ما .. شاركنا الثواب وأدعو أصدقائك للتحميل",
-                      textAlign: TextAlign.center,
+                 "كلنا بنمر بلحظات محتاجين فيها طمأنينة والقرآن دايمًا بيكون أقرب طريق للراحة، لو التطبيق لمس قلبك وساعدك شاركه مع من تحب"
+
+    ,                  textAlign: TextAlign.center,
                       style: GoogleFonts.urbanist(
                         fontWeight: FontWeight.bold,
                         fontSize: 20.0,
@@ -49,7 +50,7 @@ class ShareScreen extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 35.0),
                     child: SliderButton(
-                      text: "نشر التطبيق", 
+                      text: "شارك التطبيق", 
                       textColor: Colors.white, 
                       buttonColor: ColorResources.THEMECOLOR, 
                       onPressed: () async{

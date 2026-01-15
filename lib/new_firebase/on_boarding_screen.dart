@@ -179,7 +179,7 @@ Widget build(BuildContext context) {
                   ),
                 Expanded(
                   child: SliderButton(
-                    text: 'لا تظهر مرة أخرى', 
+                    text: 'ابدأ الآن', 
                     textColor: Colors.white, 
                     buttonColor: ColorResources.THEMECOLOR, 
                     onPressed: (){

@@ -24,7 +24,7 @@ class _SwitchWidgetState extends State<SwitchWidget> {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 20.0),
-      padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 2.0),
+      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20.0),
         color: ColorResources.BOTTOM_BAR,

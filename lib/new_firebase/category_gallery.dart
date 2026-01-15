@@ -128,7 +128,7 @@ class _CategoriesGalleryState extends State<CategoriesGallery> {
                         onPressed: () => Navigator.of(dialogContext).pop(),
                       ),
                       Text(
-                        'اختر الفئة',
+                        'بماذا تشعر ؟',
                         style: GoogleFonts.cairo(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -290,6 +290,7 @@ class _CategoriesGalleryState extends State<CategoriesGallery> {
                                 key.currentState!.openDrawer();
                               },
                             )),
+                            SizedBox(height: 20,),
                           Container(
                             alignment: Alignment.center,
                             height: 250,

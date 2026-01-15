@@ -50,16 +50,16 @@ class _HomeState extends State<Home> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start, 
               children: [
-                // Container(
-                //   height: 70.0,
-                //   child: Center(
-                //    child: Image.asset(
-                //     Images.splash_logo, 
-                //     height: 50.0, 
-                //     width: double.infinity
-                //   ),
-                //  ),
-                // ),
+                Container(
+                  height: 70.0,
+                  child: Center(
+                   child: Image.asset(
+                    Images.splash_logo, 
+                    height: 50.0, 
+                    width: double.infinity
+                  ),
+                 ),
+                ),
                 MenuButton(
                   onTap: () {
                     key.currentState!.openDrawer();
@@ -82,6 +82,7 @@ class _HomeState extends State<Home> {
                         ),
                       ),
                       ),
+                      SizedBox(height: 16,),
                       Directionality(
                         textDirection: TextDirection.rtl,
                         child: Wrap(

@@ -174,151 +174,142 @@ class _JsonCategoryManagerState extends State<JsonCategoryManager> {
       body: Stack(
         alignment: Alignment.bottomCenter,
         children: [
-          BackgroundImage(
-            child: SafeArea(
-              bottom: false,
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 12.0),
-                child: Column(
-                  children: [
-                    // Back button
-                    BackButtonWidget(),
-
-                    // Add to widget button
-                    InkWell(
-                      onTap: _addToWidget,
-                      child: Container(
-                        width: double.infinity,
-                        padding: EdgeInsets.symmetric(vertical: 12),
-                        margin: EdgeInsets.symmetric(vertical: 8),
-                        decoration: BoxDecoration(
-                          color: ColorResources.THEMECOLOR,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "إضافة للويدجت",
-                              style: GoogleFonts.cairo(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ],
+          SafeArea(
+            child: BackgroundImage(
+              child: SafeArea(
+                bottom: false,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 12.0),
+                  child: Column(
+                    children: [
+                      // Back button
+                      BackButtonWidget(),
+            
+                      // Category name
+                      Container(
+                        padding: EdgeInsets.only(bottom: 8),
+                        child: Text(
+                          actualCategory.isNotEmpty ? actualCategory : widget.category,
+                          style: GoogleFonts.cairo(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: ColorResources.BOTTOM_BAR_SELECTED,
+                          ),
+                          textAlign: TextAlign.center,
                         ),
                       ),
-                    ),
-
-                    // Category name
-                    Container(
-                      padding: EdgeInsets.symmetric(vertical: 8),
-                      child: Text(
-                        actualCategory.isNotEmpty ? actualCategory : widget.category,
-                        style: GoogleFonts.cairo(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: ColorResources.BOTTOM_BAR_SELECTED,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-
-                    // Main content
-                    Expanded(
-                      child: isLoading
-                          ? Center(
-                              child: CircularProgressIndicator(
-                                color: ColorResources.THEMECOLOR,
-                              ),
-                            )
-                          : verses.isEmpty
-                              ? Center(
-                                  child: Text(
-                                    "لا توجد آيات في هذه الفئة",
-                                    style: GoogleFonts.cairo(
-                                      fontSize: 18,
-                                      color: ColorResources.THEMECOLOR,
-                                    ),
-                                  ),
-                                )
-                              : Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    // Left arrow
-                                    Container(
-                                      margin: EdgeInsets.only(top: 15.0),
-                                      height: MediaQuery.of(context).size.height / 1.7,
-                                      alignment: Alignment.center,
-                                      child: CircleButton(
-                                        showColor: currentIndex > 0,
-                                        onPressed: () {
-                                          if (currentIndex > 0) {
-                                            _controller!.previousPage(
-                                              duration: Duration(milliseconds: 500),
-                                              curve: Curves.easeOut,
-                                            );
-                                          }
-                                        },
-                                        direction: Direction.left,
+            
+                      // Main content
+                      Expanded(
+                        child: isLoading
+                            ? Center(
+                                child: CircularProgressIndicator(
+                                  color: ColorResources.THEMECOLOR,
+                                ),
+                              )
+                            : verses.isEmpty
+                                ? Center(
+                                    child: Text(
+                                      "لا توجد آيات في هذه الفئة",
+                                      style: GoogleFonts.cairo(
+                                        fontSize: 18,
+                                        color: ColorResources.THEMECOLOR,
                                       ),
                                     ),
-
-                                    // Verses PageView
-                                    Expanded(
-                                      flex: 8,
-                                      child: PageView.builder(
-                                        physics: NeverScrollableScrollPhysics(),
-                                        itemCount: verses.length,
-                                        controller: _controller,
-                                        onPageChanged: (value) {
-                                          setState(() {
-                                            currentIndex = value;
-                                          });
-                                        },
-                                        itemBuilder: (BuildContext context, int index) {
-                                          final verse = verses[index];
-                                          final isFav = favoriteStates[index] ?? false;
-
-                                          return ListView(
-                                            physics: BouncingScrollPhysics(),
-                                            padding: EdgeInsets.only(bottom: 50.0),
-                                            children: [
-                                              Container(
-                                                alignment: Alignment.center,
-                                                child: ExpandableNotifier(
-                                                  child: ScrollOnExpand(
-                                                    scrollOnExpand: false,
-                                                    child: Card(
-                                                      margin: EdgeInsets.only(
-                                                        top: 15.0,
-                                                        left: 10.0,
-                                                        right: 10.0,
-                                                      ),
-                                                      elevation: 0.1,
-                                                      shape: RoundedRectangleBorder(
-                                                        borderRadius: BorderRadius.circular(20),
-                                                      ),
-                                                      clipBehavior: Clip.antiAlias,
-                                                      child: Column(
-                                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                                        children: <Widget>[
-                                                          Padding(
-                                                            padding: EdgeInsets.only(
-                                                              left: 15,
-                                                              right: 15,
-                                                              top: 15,
-                                                            ),
-                                                            child: Expandable(
-                                                              collapsed: Container(
-                                                                height: MediaQuery.of(context).size.height / 1.9,
-                                                                alignment: Alignment.center,
-                                                                child: Padding(
-                                                                  padding: EdgeInsets.only(top: 10.0),
+                                  )
+                                : Row(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      // Left arrow
+                                      Container(
+                                        margin: EdgeInsets.only(top: 15.0),
+                                        height: MediaQuery.of(context).size.height / 1.7,
+                                        alignment: Alignment.center,
+                                        child: CircleButton(
+                                          showColor: currentIndex > 0,
+                                          onPressed: () {
+                                            if (currentIndex > 0) {
+                                              _controller!.previousPage(
+                                                duration: Duration(milliseconds: 500),
+                                                curve: Curves.easeOut,
+                                              );
+                                            }
+                                          },
+                                          direction: Direction.left,
+                                        ),
+                                      ),
+            
+                                      // Verses PageView
+                                      Expanded(
+                                        flex: 8,
+                                        child: PageView.builder(
+                                          physics: NeverScrollableScrollPhysics(),
+                                          itemCount: verses.length,
+                                          controller: _controller,
+                                          onPageChanged: (value) {
+                                            setState(() {
+                                              currentIndex = value;
+                                            });
+                                          },
+                                          itemBuilder: (BuildContext context, int index) {
+                                            final verse = verses[index];
+                                            final isFav = favoriteStates[index] ?? false;
+            
+                                            return ListView(
+                                              physics: BouncingScrollPhysics(),
+                                              padding: EdgeInsets.only(bottom: 50.0),
+                                              children: [
+                                                Container(
+                                                  alignment: Alignment.center,
+                                                  child: ExpandableNotifier(
+                                                    child: ScrollOnExpand(
+                                                      scrollOnExpand: false,
+                                                      child: Card(
+                                                        margin: EdgeInsets.only(
+                                                          top: 15.0,
+                                                          left: 10.0,
+                                                          right: 10.0,
+                                                        ),
+                                                        elevation: 0.1,
+                                                        shape: RoundedRectangleBorder(
+                                                          borderRadius: BorderRadius.circular(20),
+                                                        ),
+                                                        clipBehavior: Clip.antiAlias,
+                                                        child: Column(
+                                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                                          children: <Widget>[
+                                                            Padding(
+                                                              padding: EdgeInsets.only(
+                                                                left: 15,
+                                                                right: 15,
+                                                                top: 15,
+                                                              ),
+                                                              child: Expandable(
+                                                                collapsed: Container(
+                                                                  height: MediaQuery.of(context).size.height / 1.9,
+                                                                  alignment: Alignment.center,
+                                                                  child: Padding(
+                                                                    padding: EdgeInsets.only(top: 10.0),
+                                                                    child: Text(
+                                                                      verse.verse,
+                                                                      maxLines: 12,
+                                                                      textAlign: TextAlign.center,
+                                                                      textDirection: TextDirection.rtl,
+                                                                      style: GoogleFonts.cairo(
+                                                                        color: ColorResources.BOTTOM_BAR_SELECTED,
+                                                                        fontSize: 18,
+                                                                        fontWeight: FontWeight.w600,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                expanded: Container(
+                                                                  alignment: Alignment.center,
+                                                                  height: verse.verse.length < 200
+                                                                      ? MediaQuery.of(context).size.height / 1.7
+                                                                      : null,
                                                                   child: Text(
                                                                     verse.verse,
-                                                                    maxLines: 12,
                                                                     textAlign: TextAlign.center,
                                                                     textDirection: TextDirection.rtl,
                                                                     style: GoogleFonts.cairo(
@@ -329,161 +320,172 @@ class _JsonCategoryManagerState extends State<JsonCategoryManager> {
                                                                   ),
                                                                 ),
                                                               ),
-                                                              expanded: Container(
-                                                                alignment: Alignment.center,
-                                                                height: verse.verse.length < 200
-                                                                    ? MediaQuery.of(context).size.height / 1.7
-                                                                    : null,
-                                                                child: Text(
-                                                                  verse.verse,
-                                                                  textAlign: TextAlign.center,
-                                                                  textDirection: TextDirection.rtl,
-                                                                  style: GoogleFonts.cairo(
-                                                                    color: ColorResources.BOTTOM_BAR_SELECTED,
-                                                                    fontSize: 18,
-                                                                    fontWeight: FontWeight.w600,
-                                                                  ),
-                                                                ),
-                                                              ),
                                                             ),
-                                                          ),
-                                                          // Surah name
-                                                          if (verse.surah.isNotEmpty)
-                                                            Container(
-                                                              width: double.infinity,
-                                                              padding: EdgeInsets.symmetric(
-                                                                vertical: 8,
-                                                                horizontal: 16,
-                                                              ),
-                                                              color: ColorResources.THEMECOLOR.withAlpha((0.1 * 255).toInt()),
-                                                              child: Text(
-                                                                verse.surah,
-                                                                textAlign: TextAlign.center,
-                                                                style: GoogleFonts.cairo(
-                                                                  fontSize: 14,
-                                                                  fontWeight: FontWeight.w600,
-                                                                  color: ColorResources.THEMECOLOR,
+                                                            // Surah name
+                                                            // if (verse.surah.isNotEmpty)
+                                                            //   Container(
+                                                            //     width: double.infinity,
+                                                            //     padding: EdgeInsets.symmetric(
+                                                            //       vertical: 8,
+                                                            //       horizontal: 16,
+                                                            //     ),
+                                                            //     color: ColorResources.THEMECOLOR.withAlpha((0.1 * 255).toInt()),
+                                                            //     child: Text(
+                                                            //       verse.surah,
+                                                            //       textAlign: TextAlign.center,
+                                                            //       style: GoogleFonts.cairo(
+                                                            //         fontSize: 14,
+                                                            //         fontWeight: FontWeight.w600,
+                                                            //         color: ColorResources.THEMECOLOR,
+                                                            //       ),
+                                                            //     ),
+                                                            //   ),
+                                                            Row(
+                                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                              children: <Widget>[
+                                                                Builder(
+                                                                  builder: (context) {
+                                                                    var controller = ExpandableController.of(
+                                                                      context,
+                                                                      required: true,
+                                                                    )!;
+                                                                    return IconButton(
+                                                                      onPressed: () {
+                                                                        controller.toggle();
+                                                                      },
+                                                                      icon: controller.expanded
+                                                                          ? Icon(
+                                                                              Icons.expand_less,
+                                                                              color: ColorResources.BOTTOM_BAR_SELECTED,
+                                                                            )
+                                                                          : Icon(
+                                                                              Icons.expand_more_outlined,
+                                                                              color: ColorResources.BOTTOM_BAR_SELECTED,
+                                                                            ),
+                                                                    );
+                                                                  },
                                                                 ),
-                                                              ),
+                                                              ],
                                                             ),
-                                                          Row(
-                                                            mainAxisAlignment: MainAxisAlignment.center,
-                                                            children: <Widget>[
-                                                              Builder(
-                                                                builder: (context) {
-                                                                  var controller = ExpandableController.of(
-                                                                    context,
-                                                                    required: true,
-                                                                  )!;
-                                                                  return IconButton(
-                                                                    onPressed: () {
-                                                                      controller.toggle();
-                                                                    },
-                                                                    icon: controller.expanded
-                                                                        ? Icon(
-                                                                            Icons.expand_less,
-                                                                            color: ColorResources.BOTTOM_BAR_SELECTED,
-                                                                          )
-                                                                        : Icon(
-                                                                            Icons.expand_more_outlined,
-                                                                            color: ColorResources.BOTTOM_BAR_SELECTED,
-                                                                          ),
-                                                                  );
-                                                                },
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ],
+                                                          ],
+                                                        ),
                                                       ),
                                                     ),
                                                   ),
                                                 ),
-                                              ),
-                                              SizedBox(width: 5),
-                                              Padding(
-                                                padding: const EdgeInsets.symmetric(
-                                                  horizontal: 15.0,
-                                                  vertical: 7.0,
-                                                ),
-                                                child: Row(
-                                                  children: [
-                                                    // Share button
-                                                    LightCircleButton(
-                                                      onPressed: () async {
-                                                        await Share.share(
-                                                          '${verse.verse}\n\n${verse.surah}\n\n${AllText.appLink}',
-                                                          subject: widget.category,
-                                                        );
-                                                      },
-                                                      icon: Icons.share,
-                                                    ),
-                                                    SizedBox(width: 10.0),
-                                                    // Favorite button
-                                                    LightCircleButton(
-                                                      onPressed: () async {
-                                                        final newState = await FavoritesService.toggleFavorite(verse.verse);
-                                                        setState(() {
-                                                          favoriteStates[index] = newState;
-                                                        });
-                                                        ScaffoldMessenger.of(context).showSnackBar(
-                                                          SnackBar(
-                                                            content: Text(
-                                                              newState
-                                                                  ? "تمت الإضافة إلى المفضلة"
-                                                                  : "تمت الإزالة من المفضلة",
+                                                SizedBox(width: 5),
+                                                Padding(
+                                                  padding: const EdgeInsets.symmetric(
+                                                    horizontal: 15.0,
+                                                    vertical: 7.0,
+                                                  ),
+                                                  child: Row(
+                                                    children: [
+                                                      // Share button
+                                                      LightCircleButton(
+                                                        onPressed: () async {
+                                                          await Share.share(
+                                                            '${verse.verse}\n\n${verse.surah}\n\n${AllText.appLink}',
+                                                            subject: widget.category,
+                                                          );
+                                                        },
+                                                        icon: Icons.share,
+                                                      ),
+                                                      SizedBox(width: 10.0),
+                                                      // Favorite button
+                                                      LightCircleButton(
+                                                        onPressed: () async {
+                                                          final newState = await FavoritesService.toggleFavorite(verse.verse);
+                                                          setState(() {
+                                                            favoriteStates[index] = newState;
+                                                          });
+                                                          ScaffoldMessenger.of(context).showSnackBar(
+                                                            SnackBar(
+                                                              content: Text(
+                                                                newState
+                                                                    ? "تمت الإضافة إلى المفضلة"
+                                                                    : "تمت الإزالة من المفضلة",
+                                                              ),
+                                                              backgroundColor: ColorResources.THEMECOLOR,
+                                                              duration: Duration(seconds: 1),
                                                             ),
-                                                            backgroundColor: ColorResources.THEMECOLOR,
-                                                            duration: Duration(seconds: 1),
-                                                          ),
-                                                        );
-                                                      },
-                                                      icon: isFav ? Icons.favorite : Icons.favorite_border,
-                                                    ),
-                                                  ],
+                                                          );
+                                                        },
+                                                        icon: isFav ? Icons.favorite : Icons.favorite_border,
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      ),
-                                    ),
-
-                                    // Right arrow
-                                    Container(
-                                      margin: EdgeInsets.only(top: 15.0),
-                                      height: MediaQuery.of(context).size.height / 1.7,
-                                      alignment: Alignment.center,
-                                      child: CircleButton(
-                                        showColor: currentIndex < verses.length - 1,
-                                        onPressed: () {
-                                          if (currentIndex < verses.length - 1) {
-                                            _controller!.nextPage(
-                                              duration: Duration(milliseconds: 500),
-                                              curve: Curves.easeIn,
+                                              ],
                                             );
-                                          }
-                                        },
-                                        direction: Direction.right,
+                                          },
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                    ),
-
-                    // Verse counter
-                    if (!isLoading && verses.isNotEmpty)
-                      Container(
-                        padding: EdgeInsets.symmetric(vertical: 8),
-                        child: Text(
-                          '${currentIndex + 1} / ${verses.length}',
-                          style: GoogleFonts.cairo(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
+            
+                                      // Right arrow
+                                      Container(
+                                        margin: EdgeInsets.only(top: 15.0),
+                                        height: MediaQuery.of(context).size.height / 1.7,
+                                        alignment: Alignment.center,
+                                        child: CircleButton(
+                                          showColor: currentIndex < verses.length - 1,
+                                          onPressed: () {
+                                            if (currentIndex < verses.length - 1) {
+                                              _controller!.nextPage(
+                                                duration: Duration(milliseconds: 500),
+                                                curve: Curves.easeIn,
+                                              );
+                                            }
+                                          },
+                                          direction: Direction.right,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                      ),
+            
+                      // Add to widget button
+                      InkWell(
+                        onTap: _addToWidget,
+                        child: Container(
+                          width: double.infinity,
+                          padding: EdgeInsets.symmetric(vertical: 12),
+                          margin: EdgeInsets.symmetric(vertical: 8),
+                          decoration: BoxDecoration(
                             color: ColorResources.THEMECOLOR,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "أضف هذا التصنيف الى الويدجت",
+                                style: GoogleFonts.cairo(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
-                  ],
+                      SizedBox(height:20),
+                      // // Verse counter
+                      // if (!isLoading && verses.isNotEmpty)
+                      //   Container(
+                      //     padding: EdgeInsets.symmetric(vertical: 8),
+                      //     child: Text(
+                      //       '${currentIndex + 1} / ${verses.length}',
+                      //       style: GoogleFonts.cairo(
+                      //         fontSize: 16,
+                      //         fontWeight: FontWeight.w600,
+                      //         color: ColorResources.THEMECOLOR,
+                      //       ),
+                      //     ),
+                      //   ),
+                    ],
+                  ),
                 ),
               ),
             ),
