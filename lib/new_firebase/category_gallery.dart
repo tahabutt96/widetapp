@@ -54,6 +54,9 @@ class _CategoriesGalleryState extends State<CategoriesGallery> {
       // Save category to preferences
       SharedPreferences sp = await SharedPreferences.getInstance();
       await sp.setString('Category', categoryName);
+      await HomeWidget.saveWidgetData<String>('category', categoryName);
+      await HomeWidget.saveWidgetData<String>('title', categoryName);
+      await HomeWidget.updateWidget(name: 'AppWidgetProvider', iOSName: 'AppWidgetProvider');
 
       setState(() {
         category = categoryName;
@@ -419,6 +422,8 @@ class _CategoriesGalleryState extends State<CategoriesGallery> {
   _sendData(var name, var ayatdescription) async {
     try {
       return Future.wait([
+        HomeWidget.saveWidgetData<String>('category', name),
+        HomeWidget.saveWidgetData<String>('categoryId', ''),
         HomeWidget.saveWidgetData<String>('title', name),
         HomeWidget.saveWidgetData<String>('message', ayatdescription)
       ]);
@@ -430,7 +435,7 @@ class _CategoriesGalleryState extends State<CategoriesGallery> {
   _updateWidget() async {
     try {
       return HomeWidget.updateWidget(
-          name: 'AppWidgetProvider', iOSName: 'HomeWidgetExample');
+          name: 'AppWidgetProvider', iOSName: 'AppWidgetProvider');
     } on PlatformException catch (exception) {
       debugPrint('Error Updating Widget. $exception');
     }
