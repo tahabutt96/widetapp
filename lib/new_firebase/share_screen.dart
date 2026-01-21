@@ -16,6 +16,9 @@ class ShareScreen extends StatelessWidget {
     return Scaffold(
       body: BackgroundImage(
         child: Column(
+          
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             // Container(
             //   margin: EdgeInsets.only(top: 20.0),
@@ -30,37 +33,31 @@ class ShareScreen extends StatelessWidget {
             //   ),
               isShowBack! ?
               BackButtonWidget():Container(),
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                 "كلنا بنمر بلحظات محتاجين فيها طمأنينة والقرآن دايمًا بيكون أقرب طريق للراحة، لو التطبيق لمس قلبك وساعدك شاركه مع من تحب"
-
-    ,                  textAlign: TextAlign.center,
-                      style: GoogleFonts.urbanist(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20.0,
-                        color: ColorResources.THEMECOLOR,
-                      ),
-                    ),
+            Directionality(
+              textDirection: TextDirection.rtl,
+              child: Padding(
+                padding: const EdgeInsets.all(0.0),
+                child: Text("كلنا بنمر بلحظات محتاجين فيها طمأنينة\nوالقرآن دايمًا بيكون أقرب طريق للراحة\nلو التطبيق لمس قلبك وساعدك\nشاركه مع من تحب",
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.urbanist(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20.0,
+                    color: ColorResources.THEMECOLOR,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 35.0),
-                    child: SliderButton(
-                      text: "شارك التطبيق", 
-                      textColor: Colors.white, 
-                      buttonColor: ColorResources.THEMECOLOR, 
-                      onPressed: () async{
-                        await Share.share(
-                            AllText.appLink,
-                            subject: 'Quran App');
-                      },
-                    ),
-                  ),
-                ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 35.0),
+              child: SliderButton(
+                text: "شارك التطبيق", 
+                textColor: Colors.white, 
+                buttonColor: ColorResources.THEMECOLOR, 
+                onPressed: () async{
+                  await Share.share(
+                      AllText.appLink,
+                      subject: 'Quran App');
+                },
               ),
             ),
           ],

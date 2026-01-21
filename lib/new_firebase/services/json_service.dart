@@ -15,7 +15,7 @@ class JsonService {
 
     try {
       print('📥 Loading JSON file...');
-      final String jsonString = await rootBundle.loadString('assets/testdeveloper.json');
+      final String jsonString = await rootBundle.loadString('assets/ayats.json');
       final Map<String, dynamic> jsonData = json.decode(jsonString);
 
       _cachedJsonData = jsonData;

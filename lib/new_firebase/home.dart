@@ -51,7 +51,7 @@ class _HomeState extends State<Home> {
               crossAxisAlignment: CrossAxisAlignment.start, 
               children: [
                 Container(
-                  height: 70.0,
+                  height: 50.0,
                   child: Center(
                    child: Image.asset(
                     Images.splash_logo, 

@@ -171,11 +171,11 @@ class _JsonCategoryManagerState extends State<JsonCategoryManager> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        alignment: Alignment.bottomCenter,
-        children: [
-          SafeArea(
-            child: BackgroundImage(
+      body: SafeArea(
+        child: Stack(
+          alignment: Alignment.bottomCenter,
+          children: [
+            BackgroundImage(
               child: SafeArea(
                 bottom: false,
                 child: Padding(
@@ -489,16 +489,16 @@ class _JsonCategoryManagerState extends State<JsonCategoryManager> {
                 ),
               ),
             ),
-          ),
-
-          // Banner Ad
-          if (isLoadingBanner && _anchoredBanner != null)
-            Container(
-              width: _anchoredBanner!.size.width.toDouble(),
-              height: _anchoredBanner!.size.height.toDouble(),
-              child: AdWidget(ad: _anchoredBanner!),
-            ),
-        ],
+        
+            // Banner Ad
+            if (isLoadingBanner && _anchoredBanner != null)
+              Container(
+                width: _anchoredBanner!.size.width.toDouble(),
+                height: _anchoredBanner!.size.height.toDouble(),
+                child: AdWidget(ad: _anchoredBanner!),
+              ),
+          ],
+        ),
       ),
     );
   }
