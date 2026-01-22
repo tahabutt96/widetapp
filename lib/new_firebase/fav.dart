@@ -109,7 +109,7 @@ class _FavoriteState extends State<Favorite> {
                                   Padding(
                                     padding: const EdgeInsets.only(top: 10.0),
                                     child: Text(
-                                      "أضف هذا التصنيف الى الويدجت",
+                                      "لم تضِف أي آيات إلى المفضلة بعد",
                                       style: GoogleFonts.cairo(
                                         color: ColorResources.THEMECOLOR,
                                         fontSize: 18,

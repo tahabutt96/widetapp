@@ -7,7 +7,7 @@ import 'package:appwidgetflutter/new_firebase/services/json_service.dart';
 import 'package:appwidgetflutter/new_firebase/services/favorites_service.dart';
 import 'package:appwidgetflutter/new_firebase/models/verse_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -47,6 +47,21 @@ class _CategoriesGalleryState extends State<CategoriesGallery> {
     });
   }
 
+  Future<void> _startBackgroundService() async {
+    final service = FlutterBackgroundService();
+
+    // Check if service is already running
+    bool isRunning = await service.isRunning();
+    print('📱 Service already running: $isRunning');
+
+    if (!isRunning) {
+      await service.startService();
+      print('✅ Background service started for auto-updating widget');
+    } else {
+      print('📱 Background service already running');
+    }
+  }
+
   Future<void> selectCategory(String categoryName) async {
     try {
       print('📱 Selecting category: $categoryName');
@@ -54,9 +69,6 @@ class _CategoriesGalleryState extends State<CategoriesGallery> {
       // Save category to preferences
       SharedPreferences sp = await SharedPreferences.getInstance();
       await sp.setString('Category', categoryName);
-      await HomeWidget.saveWidgetData<String>('category', categoryName);
-      await HomeWidget.saveWidgetData<String>('title', categoryName);
-      await HomeWidget.updateWidget(name: 'AppWidgetProvider', iOSName: 'AppWidgetProvider');
 
       setState(() {
         category = categoryName;
@@ -69,12 +81,30 @@ class _CategoriesGalleryState extends State<CategoriesGallery> {
       print('📱 Verses loaded: ${verses.length}');
 
       if (verses.isNotEmpty) {
-        // Get first verse to update widget
-        final firstVerse = verses[0];
-        await _sendAndUpdate(categoryName, firstVerse.verse);
+        // Get all verse texts for background service
+        final List<String> verseTexts = verses.map((v) => v.verse).toList();
 
-        // Show ayats dialog
-        //await showAyatsDialog(categoryName, verses);
+        // Save widget data
+        await HomeWidget.saveWidgetData<String>('category', categoryName);
+        await HomeWidget.saveWidgetData<String>('title', categoryName);
+        await HomeWidget.saveWidgetData<String>('message', verseTexts[0]);
+        await HomeWidget.saveWidgetData<int>('index', 0);
+
+        // Save to SharedPreferences for background service
+        await sp.setStringList('message', verseTexts);
+        await sp.setInt('widgetVerseIndex', 1); // Start from next verse
+
+        // Update widget immediately
+        await HomeWidget.updateWidget(
+          name: 'AppWidgetProvider',
+          androidName: 'AppWidgetProvider',
+          iOSName: 'AppWidgetProvider',
+        );
+
+        // Start background service for auto-updating
+        await _startBackgroundService();
+
+        print('✅ Widget updated with ${verseTexts.length} verses, background service started');
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -414,32 +444,6 @@ class _CategoriesGalleryState extends State<CategoriesGallery> {
     );
   }
 
-  Future<void> _sendAndUpdate(var name, var ayatDescription) async {
-    await _sendData(name, ayatDescription);
-    await _updateWidget();
-  }
-
-  _sendData(var name, var ayatdescription) async {
-    try {
-      return Future.wait([
-        HomeWidget.saveWidgetData<String>('category', name),
-        HomeWidget.saveWidgetData<String>('categoryId', ''),
-        HomeWidget.saveWidgetData<String>('title', name),
-        HomeWidget.saveWidgetData<String>('message', ayatdescription)
-      ]);
-    } on PlatformException catch (exception) {
-      debugPrint('Error Sending Data. $exception');
-    }
-  }
-
-  _updateWidget() async {
-    try {
-      return HomeWidget.updateWidget(
-          name: 'AppWidgetProvider', iOSName: 'AppWidgetProvider');
-    } on PlatformException catch (exception) {
-      debugPrint('Error Updating Widget. $exception');
-    }
-  }
 }
 
 

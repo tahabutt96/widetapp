@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:appwidgetflutter/ads_manager.dart';
 import 'package:appwidgetflutter/common/share_prefs.dart';
 import 'package:appwidgetflutter/dashboard/models/add_aya_model.dart';
@@ -12,6 +14,7 @@ import 'package:appwidgetflutter/utills/colors_resources.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -19,12 +22,93 @@ import 'package:hive/hive.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../firebase_options.dart';
 import '../utills/images_sources.dart';
 import '../utills/constants.dart';
 import 'new_firebase/category_gallery.dart';
 import 'new_firebase/home.dart';
 import 'new_firebase/providers/fav_categories_manager.dart';
+
+// Background service entry point - MUST be top-level function
+@pragma('vm:entry-point')
+void onBackgroundServiceStart(ServiceInstance serviceInstance) async {
+  WidgetsFlutterBinding.ensureInitialized();
+  print('🚀 Background service started');
+
+  // Update every 5 seconds (for testing - change to Duration(minutes: 5) for production)
+  Timer.periodic(Duration(minutes: 5), (timer) async {
+    try {
+      print('⏰ Background service tick');
+
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.reload();
+
+      final messages = prefs.getStringList('message');
+      print('📱 Messages count: ${messages?.length ?? 0}');
+
+      if (messages == null || messages.isEmpty) {
+        print('⚠️ No messages found');
+        return;
+      }
+
+      // Get current index
+      int currentIdx = prefs.getInt('widgetVerseIndex') ?? 0;
+      print('📱 Current index: $currentIdx');
+
+      // Make sure index is valid
+      if (currentIdx >= messages.length) {
+        currentIdx = 0;
+      }
+
+      // Update widget with current verse
+      final currentMessage = messages[currentIdx];
+      print('📱 Updating widget with verse index $currentIdx');
+
+      await HomeWidget.saveWidgetData<String>("message", currentMessage);
+      await HomeWidget.saveWidgetData<int>("index", currentIdx);
+
+      await HomeWidget.updateWidget(
+        name: "AppWidgetProvider",
+        androidName: "AppWidgetProvider",
+        iOSName: "AppWidgetProvider",
+      );
+      print('📱 Widget updated successfully');
+
+      // Move to next verse for next update
+      currentIdx++;
+      if (currentIdx >= messages.length) {
+        currentIdx = 0;
+      }
+      await prefs.setInt('widgetVerseIndex', currentIdx);
+      print('📱 Next index set to: $currentIdx');
+
+    } catch (e, stackTrace) {
+      print('❌ Background service error: $e');
+      print('❌ Stack trace: $stackTrace');
+    }
+  });
+}
+
+// Initialize background service
+Future<void> initializeBackgroundService() async {
+  final service = FlutterBackgroundService();
+
+  await service.configure(
+    androidConfiguration: AndroidConfiguration(
+      onStart: onBackgroundServiceStart,
+      autoStart: false, // Don't auto start - we start it when user adds to widget
+      isForegroundMode: true,
+      initialNotificationTitle: 'معي ربي',
+      initialNotificationContent: 'جاري تحديث الآيات',
+    ),
+    iosConfiguration: IosConfiguration(
+      autoStart: false,
+      onForeground: onBackgroundServiceStart,
+    ),
+  );
+  print('✅ Background service configured');
+}
 
 Future<void> main() async {
   await _initApp();
@@ -64,6 +148,10 @@ Future<void> backgroundCallback(Uri? uri) async {
 Future _initApp() async {
   WidgetsFlutterBinding.ensureInitialized();
   HomeWidget.registerBackgroundCallback(backgroundCallback);
+
+  // Initialize background service for widget auto-update
+  await initializeBackgroundService();
+
   SystemChrome.setSystemUIOverlayStyle(
     SystemUiOverlayStyle(statusBarColor: Colors.transparent),
   );

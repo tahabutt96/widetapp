@@ -34,7 +34,7 @@ class AppWidgetProvider : HomeWidgetProvider() {
                 val category = widgetData.getString("category", "الفئة")
                 val categoryId = widgetData.getString("categoryId", "")
                 val favourite = widgetData.getString("favourite", "")
-                setTextViewText(R.id.widget_message, message?: "آية")
+                setTextViewText(R.id.widget_message, message?: "اختر شعورك وسنعرض لك الآيات المناسبة .. اضغط هنا")
                 setTextViewText(R.id.category_text,category)
 
                 // Detect App opened via Click inside Flutter

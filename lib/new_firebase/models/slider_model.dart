@@ -29,7 +29,7 @@ List<SliderModel> slides = <SliderModel>[];
 SliderModel sliderModel = SliderModel();
 
 sliderModel.setImage(Images.slider1);
-sliderModel.setDescription('تخيل في كل مرة تفتح فيها هاتفك تجد أية تناسب حالتك النفسية، هذا تمامآ ما يقوم به التطبيق');
+sliderModel.setDescription('تخيل في كل مرة تفتح فيها هاتفك تجد آية تناسب حالتك النفسية، هذا تماماً ما يقوم به التطبيق');
 slides.add(sliderModel);
 
 sliderModel = SliderModel();
